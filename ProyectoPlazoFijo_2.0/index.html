@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="script.js" defer > </script>
+
+    
+
+    <title>Document</title>
+</head>
+<body  style="background-image: url(https://browsecat.net/sites/default/files/cool-supreme-100-bills-wallpapers-wallpapers-97050-841189-5096175.png);">
+   
+    <div class="conteiner">
+        <div id="app" class="app">
+            <form action="" v-on:submit.prevent="devolver" v-on:submit.prevent="reinvertir">
+                {{ mensaje }}           
+                        
+                <p>
+                   <b> Nombre:</b>
+                <input v-model="name" id="name" type="text" placeholder="Ingrese su nombre: " >
+                {{name}}
+                </p>
+
+                <p>
+                   <b> Apellido: </b>  
+                    <input v-model="apellido" id="apellido" type="text" placeholder="Ingrese su Apellido: ">
+                    {{apellido}}
+                </p>
+
+                <p>
+                    <b>Monto: </b>
+                    <input v-model="monto" id="monto" min="1000" type="number" placeholder="Ingrese el monto a Invertir: ">
+                    {{monto}}
+                </p>
+
+                <p>
+                    <b> Dias: </b>
+                    <input v-model="dias" id="dias" min="30" type="number" placeholder="Ingrese la cantidad de dias: " >
+                    {{dias}}
+                </p>
+            
+            
+                    <input type="submit" value="Invertir Monto" @click="ventana=true">
+
+                    <transition name="fade">
+                        <div class="modal-overlay" v-if="ventana"></div>
+                    </transition>
+
+                    <transition name="fade">
+                        <div class="modal" v-if="ventana">
+                            <h3>Dias: {{this.dias}}</h3>
+                            <h3>Monto Inicial: ${{this.monto}}</h3>
+                            <h3>Monto Final: ${{this.montoFinal.toFixed(3)}}</h3>
+                            <button style="color: black; background-color: rgb(238, 55, 55); border-radius: 3px;" @click="ventana=false">x</button>
+
+                        </div>
+                    </transition>
+
+                    <input type="submit" value="Reinvertir Monto" @click="ventanaReinvertir=true">
+                    <transition name="fade">
+                        <div class="modalReinvertir-overlay" v-if="ventanaReinvertir"></div>
+                    </transition>
+
+                    <transition name="fade">
+                        <div class="modalReinvertir" v-if="ventanaReinvertir && !ventana">
+                          <table id="contenedorTabla">
+                              
+                              <tbody>
+                                  <tr>
+                                     
+                                      <th>PERIODOS | </th>
+                                      <th>MONTO INICIAL | </th>
+                                      <th>MONTO FINAL | </th>
+                                      <th> <button style="color: black;background-color: rgb(247, 26, 26); border-radius: 5px;"@click="ventanaReinvertir=false">x</button></th>
+                                      
+                                  </tr>
+                                  <tr>
+                                    <td class="fijos">1</td>
+                                    <td class="montos montoInicial">{{this.monto}}</td>
+                                    <td class="montos montoFinal">{{this.montoFinal.toFixed(3)}}</td>
+                                </tr>
+                                <tr>
+                                   <td class="fijos">2</td>
+                                   <td class="montos montoInicial">{{this.monto}}</td>
+                                    <td class="montos montoFinal">{{this.montoFinal.toFixed(3)}}</td>
+                               </tr>
+                               <tr>
+                                   <td class="fijos">3</td>
+                                   <td class="montos montoInicial">{{this.monto}}</td>
+                                    <td class="montos montoFinal">{{this.montoFinal.toFixed(3)}}</td>
+                               </tr>
+                               <tr>
+                                   <td class="fijos">4</td>
+                                   <td class="montos montoInicial">{{this.monto}}</td>
+                                    <td class="montos montoFinal">{{this.montoFinal.toFixed(3)}}</td>
+                                    
+                               </tr>
+                               
+                               
+                              </tbody>
+                          </table>
+                        </div>
+                    </transition>
+
+
+            </form>
+         </div>  
+        </div>
+    
+<script>
+    const app = new Vue({
+        
+        el: '#app',
+        data: {
+        mensaje: 'Plazo Fijo',
+        ventana: false,
+        ventanaReinvertir: false,
+        name: '',
+        apellido: '',
+        monto: null,
+        dias: null,
+        errores: [],
+        montoFinal: 0,
+        montoReinvertido:0             
+                
+        },
+        methods: {
+         Calcularporcentaje(){
+            
+            if (this.dias >= 30 && this.dias <= 60) this.porcentaje = 40;
+            else if (this.dias >= 61 && this.dias <= 120) this.porcentaje = 45;
+            else if (this.dias >= 121 && this.dias <= 359) this.porcentaje = 50;
+            else if (this.dias >= 360) this.porcentaje = 65;
+            
+        },
+        
+        devolver(){
+            
+            
+            let valordias = Number(this.dias)
+            let valormonto = Number(this.monto)
+            let valorporcentaje = Number(this.porcentaje)
+            let suma = valordias + valormonto
+            this.Calcularporcentaje()
+            
+            this.montoFinal = valormonto + valormonto * (valordias/360) * (this.porcentaje/100)         
+        
+            console.log(this.porcentaje)
+        },
+        reinvertir(){
+            for (let i = 0; i < tabla.length; i++) {
+        if (i % 2 === 0) {
+            tabla[i].innerText = montoInvertir.toFixed(2).toString();
+            montoFinalReinvertir(this.monto, this.dias);
+        }
+        if (i % 2 !== 0) {
+            tabla[i].innerText = montoFinal.toFixed(2).toString();
+        }
+    }
+            this.Calcularporcentaje()
+            this.montoFinal = montoNuevo + montoNuevo * ((diasNuevo/360) * (this.porcentaje/100))
+           
+            this.montoReinvertido = this.montoFinal
+
+            
+        }}
+        
+        })
+</script>
+
+
+
+<style>
+    body {
+        display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(129, 255, 146, 0.974);
+
+
+    }
+            
+    form{
+        background-color: rgb(141, 187, 187);
+        height: 229px;
+    }
+    .app{
+    
+
+        
+        text-align: center;
+        background-color: rgb(255, 255, 255);
+        opacity: 0.80;
+        border-radius: 5px;
+        width: 500px;
+        padding: 3px;
+        height: 230px;
+
+    }
+    p{
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+    }
+    
+    input{
+        border-radius: 5px;
+    }
+    .modal-overlay{
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background: rgba(0, 0,0, 0.4);
+    }
+    .modal{
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        background: white;
+        padding: 20px;
+        border-radius: 5px;
+        z-index: 1;
+    }
+    .modalReinvertir{
+        background-color: azure;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        background: white;
+        padding: 20px;
+        border-radius: 5px;
+        z-index: 1;
+        
+    }
+    .modalReinvertir-overlay{
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background: rgba(0, 0,0, 0.4);
+    }
+    
+    
+</style>
+
+    
+</body>
+
+</html>
